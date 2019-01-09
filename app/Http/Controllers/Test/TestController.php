@@ -62,4 +62,8 @@ class TestController extends Controller
 
 
 	}
+
+	public function checkCookie(){
+		echo __METHOD__;
+	}
 }

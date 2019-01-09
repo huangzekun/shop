@@ -3,8 +3,6 @@
 @section('title')     @endsection
 
 @section('header')
-    @parent
-    <p style="color: red;">This is Child header.</p>
 @endsection
 
 @section('content')
@@ -29,5 +27,4 @@
 
 @section('footer')
     @parent
-    <p style="color: red;">This is Child footer .</p>
 @endsection

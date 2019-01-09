@@ -32,7 +32,8 @@ Route::get('/month/{m}/date/{d}','Test\TestController@md');
 Route::get('/name/{str?}','Test\TestController@showName');
 Route::get('/test1','User\UserController@test1');
 
-
+//中间件
+Route::get('/checkcookie','Test\TestController@checkCookie')->middleware('check.cookie');
 
 // View视图路由
 Route::view('/mvc','mvc');
@@ -57,3 +58,22 @@ Route::post('loginadd','User\UserController@loginadd');
 
 //个人
 Route::get('center','User\UserController@center');
+
+//购物车
+Route::get('/cart','Cart\CartController@index')->middleware('check.login');
+Route::get('/cartadd/{goods_id}','Cart\CartController@cartadd')->middleware('check.login');
+Route::get('/cartdel/{goods_id}','Cart\CartController@cartdel')->middleware('check.login');
+Route::get('/addcart/{goods_id}','Cart\CartController@addcart')->middleware('check.login');
+Route::post('/addcart2','Cart\CartController@addcart2')->middleware('check.login');
+Route::any('/del/{goods_id}','Cart\CartController@del')->middleware('check.login');
+
+//商品
+Route::get('goods','Goods\GoodsController@index');
+
+
+
+
+
+
+
+

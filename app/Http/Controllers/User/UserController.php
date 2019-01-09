@@ -69,8 +69,9 @@ class UserController extends Controller
 		$model=UserModel::insertGetId($info);
 		if($model){
 			$token=substr(md5(time().mt_rand(1,99999)),10,10);
-			setcookie('id',$model,time()+86400,'/','www.shop.laravel.com',false,true);
+			setcookie('uid',$model,time()+86400,'/','www.shop.laravel.com',false,true);
 			setcookie('token',$token,time()+86400,'/center','',false,true);
+			request()->session()->put('uid',$model);
 			request()->session()->put('u_token',$token);
 			header('refresh:2,/center');
 			echo '成功';
@@ -93,8 +94,9 @@ class UserController extends Controller
 			$pwd=password_verify($data['user_pwd'],$model['user_pwd']);
 			if($pwd==true){
 				$token=substr(md5(time().mt_rand(1,99999)),10,10);
-				setcookie('id',$model['user_id'],time()+86400,'/','www.shop.laravel.com',false,true);
+				setcookie('uid',$model['user_id'],time()+86400,'/','www.shop.laravel.com',false,true);
 				setcookie('token',$token,time()+86400,'/center','',false,true);
+				request()->session()->put('uid',$model['user_id']);
 				request()->session()->put('u_token',$token);
 
 				header("Refresh:2;/center");
