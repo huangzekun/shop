@@ -70,6 +70,16 @@ Route::any('/del/{goods_id}','Cart\CartController@del')->middleware('check.login
 //商品
 Route::get('goods','Goods\GoodsController@index');
 
+//生成订单
+Route::any('/order/add','Order\OrderController@add');
+
+//我的订单
+Route::any('/order/myorder','Order\OrderController@myorder');
+
+//支付成功
+Route::any('/order/good','Order\OrderController@good');
+
+
 
 
 

@@ -16,6 +16,9 @@ class CartController extends Controller{
         $goods=CartModel::where(['uid'=>session()->get('uid')])->get()->toArray();
         if(empty($goods)){
             echo '购物车是空的';
+            header('refresh:2,/goods');
+            exit;
+
         }
         foreach($goods as $k=>$v) {
             $info = GoodsModel::where(['goods_id' => $v['goods_id']])->first()->toArray();
@@ -26,7 +29,7 @@ class CartController extends Controller{
             $data=[
                 'list'=>$list
             ];
-        //print_r($data);die;
+
         return view('Cart/cart',$data);
     }
 
