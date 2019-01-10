@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Order;
 
 use App\Model\CartModel;
 use App\Model\GoodsModel;
+use App\Model\UserModel;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -47,11 +49,29 @@ class OrderController extends Controller{
         return view('order/order',$info);
     }
 
-    public function good(){
+    public function good($order_id){
+        $info=OrderModel::where(['order_id'=>$order_id])->first();
+        if(!$info){
+            echo '订单不存在';
+            exit;
+        }
+        if($info->pay_time >0){
+            echo '订单已支付';
+            exit;
+        }
+        //支付成功修改时间
+        OrderModel::where(['order_id'=>$order_id])->update(['pay_time'=>time(),'pay_amout'=>rand(1111,9999),'is_pay'=>1]);
+
+        //增加积分
+        UserModel::where(['user_id'=>session()->get('uid')])->increment('user_optins',$info['order_amout']);
+
+        header('refresh:2,/center');
         echo "付款成功，等待发货";
+
+
     }
 
-    
+
     //我的订单
     public function myorder(){
         $info=OrderModel::where(['u_id'=>session()->get('uid')])->orderBy('order_id','desc')->get()->toArray();

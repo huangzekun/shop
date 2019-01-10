@@ -22,7 +22,7 @@
                     <td class="success">{{$list['add_time']}}</td>
                 </tr>
         </table>
-        <a href="/order/good" class="btn btn-danger btn-block">付款 </a>
+        <a href="/order/good/{{$list['order_id']}}" class="btn btn-danger btn-block">付款 </a>
 
     </form>
 @endsection

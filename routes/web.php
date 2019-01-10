@@ -77,7 +77,7 @@ Route::any('/order/add','Order\OrderController@add');
 Route::any('/order/myorder','Order\OrderController@myorder');
 
 //支付成功
-Route::any('/order/good','Order\OrderController@good');
+Route::any('/order/good/{order_id}','Order\OrderController@good');
 
 
 

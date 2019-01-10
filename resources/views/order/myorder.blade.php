@@ -13,6 +13,7 @@
             <tr align="center">
                 <td class="active"><b>订单号</b></td>
                 <td class="active"><b>订单价格</b></td>
+                <td class="active"><b>是否付款</b></td>
                 <td class="active"><b>订单时间</b></td>
             </tr>
             <!-- On cells (`td` or `th`) -->
@@ -20,6 +21,13 @@
             <tr align="center">
                 <td class="success">{{$v['order_sn']}}</td>
                 <td class="success">{{$v['order_amout']}}</td>
+                <td class="success">
+                    @if($v['is_pay']==0)
+                        未付款
+                    @else
+                        已付款
+                    @endif
+                </td>
                 <td class="success">{{$v['add_time']}}</td>
             </tr>
             @endforeach

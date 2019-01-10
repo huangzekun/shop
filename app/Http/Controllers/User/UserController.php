@@ -118,11 +118,10 @@ class UserController extends Controller
 		if($_COOKIE['token'] != request()->session()->get("u_token")){
 			die('非法登陆');
 		}
-
-		echo 'u_token: '.request()->session()->get('u_token'); echo '</br>';
+		//echo 'u_token: '.request()->session()->get('u_token'); echo '</br>';
 		//echo '<pre>';print_r($request->session()->get('u_token'));echo '</pre>';
 
-		echo '<pre>';print_r($_COOKIE);echo '</pre>';
+		//echo '<pre>';print_r($_COOKIE);echo '</pre>';
 		return view('user.center');
 	}
 
