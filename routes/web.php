@@ -81,6 +81,11 @@ Route::any('/order/good/{order_id}','Order\OrderController@good');
 
 
 
+//支付
+Route::get('/pay/alipay/test','Pay\alipayController@test');
+
+
+
 
 
 
