@@ -15,6 +15,7 @@ class AlipayController extends Controller
     public $gate_way = 'https://openapi.alipaydev.com/gateway.do';
     public $notify_url = 'http://jj.anjingdehua.cn';
     public $rsaPrivateKeyFilePath = './key/priv.key';
+    
 
 
 
