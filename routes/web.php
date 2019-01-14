@@ -85,6 +85,11 @@ Route::any('/order/good/{order_id}','Order\OrderController@good');
 Route::get('/pay/alipay/test','Pay\alipayController@test');
 
 
+//同步异步
+Route::post('pay/alipay/notify','Pay\alipayController@notify');
+Route::get('pay/alipay/return','Pay\alipayController@return');
+
+
 
 
 
