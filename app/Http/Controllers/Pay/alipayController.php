@@ -184,7 +184,7 @@ class AlipayController extends Controller
 
 
     //验签
-    function verify($params) {
+    function verify() {
 
         return true;
     }
