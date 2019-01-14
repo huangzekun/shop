@@ -86,8 +86,8 @@ Route::get('/pay/alipay/test','Pay\alipayController@test');
 
 
 //同步异步
-Route::post('pay/alipay/notify','Pay\alipayController@aliNotify');
-Route::get('pay/alipay/return','Pay\alipayController@aliReturn');
+Route::post('pay/alipay/notify','Pay\alipayController@aliNotify');//异步
+Route::get('pay/alipay/return','Pay\alipayController@aliReturn'); //同步
 
 
 
