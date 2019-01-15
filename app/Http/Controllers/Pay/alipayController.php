@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pay;
 
+use App\Model\OrderModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,13 +27,23 @@ class AlipayController extends Controller
     }
 
 
-    public function test()
-    {
+    public function pay($order_id){
 
+        $order_info=OrderModel::where(['order_id'=>$order_id])->fist()->toArray();
+        //判断订单是否已被支付
+        if($order_info['is_pay'== 1]){
+            die('订单已被支付');
+        }
+
+        //判断订单是否已被删除
+        if($order_info['is_delete'== 1]){
+            die('订单已被删除');
+        }
+        //业务参数
         $bizcont = [
-            'subject'           => 'ancsd'. mt_rand(1111,9999).str_random(6),
-            'out_trade_no'      => 'oid'.date('YmdHis').mt_rand(1111,2222),
-            'total_amount'      => 0.01,
+            'subject'           => '好哥哥:'.$order_id,
+            'out_trade_no'      => $order_id,
+            'total_amount'      => $order_info['order_amout'] / 100 ,
             'product_code'      => 'QUICK_WAP_WAY',
 
         ];
@@ -143,14 +154,11 @@ class AlipayController extends Controller
      */
     public function aliReturn()
     {
-        echo '<pre>';print_r($_GET);echo '</pre>';
-        //验签 支付宝的公钥
-        if(!$this->verify()){
-            echo 'error';
-        }
+        header('Refresh:2;url=/order/myorder');
+        echo "订单： ".$_GET['out_trade_no'] . ' 支付成功，正在跳转';
 
-        //处理订单逻辑
-        $this->dealOrder($_GET);
+
+
     }
 
     /**
