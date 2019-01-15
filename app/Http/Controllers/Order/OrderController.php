@@ -74,7 +74,7 @@ class OrderController extends Controller{
 
     //我的订单
     public function myorder(){
-        $info=OrderModel::where(['u_id'=>session()->get('uid')])->orderBy('order_id','desc')->get()->toArray();
+        $info=OrderModel::where(['u_id'=>session()->get('uid'),['is_delete']]==0)->orderBy('order_id','desc')->get()->toArray();
 
         if(empty($info)){
             echo '我的订单为空';
