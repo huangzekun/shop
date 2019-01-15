@@ -172,9 +172,9 @@ class AlipayController extends Controller
         $log_str = '>>>> '.date('Y-m-d H:i:s') . $data . "<<<<\n\n";
         //记录日志
         file_put_contents('logs/alipay.log',$log_str,FILE_APPEND);
-        exit;
         //验签
         $res = $this->verify($_POST);
+        var_dump($_POST);exit;
 
         $log_str = '>>>> ' . date('Y-m-d H:i:s');
         if($res === false){
