@@ -23,7 +23,7 @@
                 <td class="success">{{$v['order_amout']}}</td>
                 <td class="success">
                     @if($v['is_pay']==0)
-                        未付款<a href="/pay/alipay/pay/{{$v['order_id']}}" class="btn btn-danger ">去付款 </a>
+                        <a href="/pay/alipay/pay/{{$['order_id']}}" class="btn btn-danger ">去付款 </a>
                     @else
                         已付款
                     @endif
