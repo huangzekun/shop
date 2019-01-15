@@ -29,7 +29,7 @@ class AlipayController extends Controller
 
     public function pay($order_id){
 
-        $order_info=OrderModel::where(['order_id'=>$order_id])->fist()->toArray();
+        $order_info=OrderModel::where(['order_id'=>$order_id])->first()->toArray();
         //判断订单是否已被支付
         if($order_info['is_pay'== 1]){
             die('订单已被支付');
