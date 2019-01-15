@@ -31,12 +31,12 @@ class AlipayController extends Controller
 
         $order_info=OrderModel::where(['order_id'=>$order_id])->first()->toArray();
         //判断订单是否已被支付
-        if($order_info['is_pay'== 1]){
+        if($order_info['is_pay']== 1){
             die('订单已被支付');
         }
 
         //判断订单是否已被删除
-        if($order_info['is_delete'== 1]){
+        if($order_info['is_delete']== 1){
             die('订单已被删除');
         }
         //业务参数
