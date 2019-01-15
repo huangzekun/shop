@@ -16,5 +16,6 @@ class IndexController extends Controller
                 OrderModel::where(['order_id'=>$v['order_id']])->update(['is_delete'=>1]);
             }
         }
+        echo date('Y-m-d H:i:s');
     }
 }
