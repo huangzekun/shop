@@ -82,7 +82,7 @@ Route::any('/order/good/{order_id}','Order\OrderController@good');
 
 
 //支付
-Route::get('/pay/alipay/test','Pay\alipayController@test');
+Route::get('/pay/alipay/pay/{order_id}','Pay\alipayController@pay');
 
 
 //同步异步
