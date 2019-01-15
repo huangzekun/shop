@@ -89,7 +89,8 @@ Route::get('/pay/alipay/pay/{order_id}','Pay\alipayController@pay');
 Route::post('pay/alipay/notify','Pay\alipayController@aliNotify');//异步
 Route::get('pay/alipay/return','Pay\alipayController@aliReturn'); //同步
 
-
+//定时删除
+Route::any('/crontab/delete','Crontab\IndexController@delete');
 
 
 
