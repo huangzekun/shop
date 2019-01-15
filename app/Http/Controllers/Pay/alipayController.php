@@ -174,7 +174,6 @@ class AlipayController extends Controller
         file_put_contents('logs/alipay.log',$log_str,FILE_APPEND);
         //验签
         $res = $this->verify($_POST);
-
         $log_str = '>>>> ' . date('Y-m-d H:i:s');
         if($res === false){
             //记录日志 验签失败
@@ -191,7 +190,7 @@ class AlipayController extends Controller
             $order_id=$_POST['out_trade_no'];
             $info=[
                 'is_pay'        => 1,       //支付状态  0未支付 1已支付
-                'pay_amount'    => $_POST['total_amount'],    //支付金额
+                'pay_amout'    => $_POST['total_amount'],    //支付金额
                 'pay_time'      => strtotime($_POST['gmt_payment']), //支付时间
                 'plat_oid'      => $_POST['trade_no'],      //支付宝订单号
                 'plat'          => 1,      //平台编号 1支付宝 2微信
