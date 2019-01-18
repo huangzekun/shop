@@ -93,8 +93,9 @@ Route::get('pay/alipay/return','Pay\alipayController@aliReturn'); //同步
 Route::any('/crontab/delete','Crontab\IndexController@delete');
 
 
-
-
+Route::middleware(['log.click'])->group(function(){
+    Route::any('/test/abc','Test\TestController@abc');
+});
 
 
 
