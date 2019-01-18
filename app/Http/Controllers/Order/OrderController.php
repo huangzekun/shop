@@ -9,10 +9,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Model\OrderModel;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller{
+    public function __construct(){
+        $this->middleware('auth');
+    }
     public function add(){
-        $cart_goods=CartModel::where(['uid'=>session()->get('uid')])->get()->toArray();
+        $cart_goods=CartModel::where(['uid'=>Auth::id()])->get()->toArray();
         if(empty($cart_goods)){
             die('购物车中无商品');
         }
@@ -27,7 +31,7 @@ class OrderController extends Controller{
         //生成订单
         $order_sn=OrderModel::generateOrderSN();
         $data=[
-            'u_id'=>session()->get('uid'),
+            'u_id'=>Auth::id(),
             'order_sn'=>$order_sn,
             'add_time'=>time(),
             'order_amout'=>$order_amout
@@ -44,7 +48,7 @@ class OrderController extends Controller{
         //print_r($data);exit;
 
         //清空购物车
-        CartModel::where(['uid'=>session()->get('uid')])->delete();
+        CartModel::where(['uid'=>Auth::id()])->delete();
 
         return view('order/order',$info);
     }
@@ -63,7 +67,7 @@ class OrderController extends Controller{
         OrderModel::where(['order_id'=>$order_id])->update(['pay_time'=>time(),'pay_amout'=>rand(1111,9999),'is_pay'=>1]);
 
         //增加积分
-        UserModel::where(['user_id'=>session()->get('uid')])->increment('user_optins',$info['order_amout']);
+        UserModel::where(['user_id'=>Auth::id()])->increment('user_optins',$info['order_amout']);
 
         header('refresh:2,/center');
         echo "付款成功，等待发货";
@@ -74,7 +78,7 @@ class OrderController extends Controller{
 
     //我的订单
     public function myorder(){
-        $info=OrderModel::where(['u_id'=>session()->get('uid'),'is_delete'=>0])->orderBy('order_id','desc')->get()->toArray();
+        $info=OrderModel::where(['u_id'=>Auth::id(),'is_delete'=>0])->orderBy('order_id','desc')->get()->toArray();
 
         if(empty($info)){
             echo '我的订单为空';

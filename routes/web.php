@@ -60,12 +60,12 @@ Route::post('loginadd','User\UserController@loginadd');
 Route::get('center','User\UserController@center');
 
 //购物车
-Route::get('/cart','Cart\CartController@index')->middleware('check.login');
-Route::get('/cartadd/{goods_id}','Cart\CartController@cartadd')->middleware('check.login');
-Route::get('/cartdel/{goods_id}','Cart\CartController@cartdel')->middleware('check.login');
-Route::get('/addcart/{goods_id}','Cart\CartController@addcart')->middleware('check.login');
-Route::post('/addcart2','Cart\CartController@addcart2')->middleware('check.login');
-Route::any('/del/{goods_id}','Cart\CartController@del')->middleware('check.login');
+Route::get('/cart','Cart\CartController@index');
+Route::get('/cartadd/{goods_id}','Cart\CartController@cartadd');
+Route::get('/cartdel/{goods_id}','Cart\CartController@cartdel');
+Route::get('/addcart/{goods_id}','Cart\CartController@addcart');
+Route::post('/addcart2','Cart\CartController@addcart2');
+Route::any('/del/{goods_id}','Cart\CartController@del');
 
 //商品
 Route::get('goods','Goods\GoodsController@index');
@@ -98,3 +98,7 @@ Route::any('/crontab/delete','Crontab\IndexController@delete');
 
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

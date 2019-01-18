@@ -10,8 +10,6 @@ use App\Http\Controllers\Controller;
 class AlipayController extends Controller
 {
     //
-
-
     public $app_id;
     public $gate_way;
     public $notify_url;

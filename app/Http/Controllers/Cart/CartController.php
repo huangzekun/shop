@@ -8,12 +8,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller{
 
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function index(){
 
-        $goods=CartModel::where(['uid'=>session()->get('uid')])->get()->toArray();
+        $goods=CartModel::where(['uid'=>Auth::id()])->get()->toArray();
         if(empty($goods)){
             echo '购物车是空的';
             header('refresh:2,/goods');
@@ -98,11 +103,11 @@ class CartController extends Controller{
             return $res;
         }
         //入库cart
-        $cart=CartModel::where(['uid'=>session()->get('uid'),'goods_id'=>$goods_id])->first();
+        $cart=CartModel::where(['uid'=>Auth::id(),'goods_id'=>$goods_id])->first();
         if(empty($cart)) {
             $data = [
                 'goods_id' => $goods_id,
-                'uid' => session()->get('uid'),
+                'uid' => Auth::id(),
                 'addtime' => time(),
                 'session_token' => session()->get('u_token'),
                 'num' => $num
@@ -137,7 +142,7 @@ class CartController extends Controller{
 
     //删除购物车商品
     public function del($goods_id){
-        CartModel::where(['uid'=>session()->get('uid'),'goods_id'=>$goods_id])->delete();
+        CartModel::where(['uid'=>Auth::id(),'goods_id'=>$goods_id])->delete();
         echo '商品ID:  '.$goods_id . ' 删除成功1';
         header('refresh:2,/cart');
     }
