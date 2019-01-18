@@ -28,7 +28,7 @@
                         已付款
                     @endif
                 </td>
-                <td class="success">{{$v['add_time']}}</td>
+                <td class="success">{{date('Y-m-d H:i:s',$v['add_time'])}}</td>
             </tr>
             @endforeach
         </table>

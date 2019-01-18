@@ -7,4 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class GoodsModel extends Model{
     public $table = 'goods';
     public $timestamps = false;
+    public $updated_at= false;
+
+    public $primaryKey="goods_id";
 }
