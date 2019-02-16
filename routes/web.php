@@ -70,6 +70,10 @@ Route::any('/del/{goods_id}','Cart\CartController@del');
 //商品
 Route::get('goods','Goods\GoodsController@index');
 
+//分页搜索
+Route::get('pay','Goods\GoodsController@pay');
+Route::post('payadd','Goods\GoodsController@payadd');
+
 //生成订单
 Route::any('/order/add','Order\OrderController@add');
 
@@ -97,9 +101,22 @@ Route::middleware(['log.click'])->group(function(){
     Route::any('/test/abc','Test\TestController@abc');
 });
 
+Route::any('/movie','Movie\IndexController@index');
+Route::any('/movie/buy/{pos}/{status}','Movie\IndexController@buy');
+
+
 
 
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+//微信
+Route::get('/weixin/test','Weixin\WeixinController@test');
+Route::get('/weixin/valid','Weixin\WeixinController@validToken');
+Route::get('/weixin/valid1','Weixin\WeixinController@validToken1');
+Route::post('/weixin/valid1','Weixin\WeixinController@wxEvent');        //接收微信服务器事件推送
+Route::post('/weixin/valid','Weixin\WeixinController@validToken');
+
