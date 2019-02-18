@@ -13,22 +13,11 @@ class WeixinController extends Controller
     //
 
     protected $redis_weixin_access_token = 'str:weixin_access_token';     //微信 access_token
-
-    public function test()
-    {
-        //echo __METHOD__;
-        //$this->getWXAccessToken();
-        $this->getUserInfo(1);
-    }
-
     /**
      * 首次接入
      */
     public function validToken1()
     {
-        //$get = json_encode($_GET);
-        //$str = '>>>>>' . date('Y-m-d H:i:s') .' '. $get . "<<<<<\n";
-        //file_put_contents('logs/weixin.log',$str,FILE_APPEND);
         echo $_GET['echostr'];
     }
 
@@ -131,7 +120,7 @@ class WeixinController extends Controller
         $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
 
         $data = json_decode(file_get_contents($url),true);
-        echo '<pre>';print_r($data);echo '</pre>';
+        return $data;
 
 //        $where=[
 //            'openid'=>$data['openid']
