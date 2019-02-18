@@ -38,10 +38,48 @@ class WeixinController extends Controller
     public function wxEvent()
     {
         $data = file_get_contents("php://input");
+
+
+        //解析XML
+        $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
+
+        $event = $xml->Event;                       //事件类型
+        //var_dump($xml);echo '<hr>';
+
+        if($event=='subscribe'){
+            $openid = $xml->FromUserName;               //用户openid
+            $sub_time = $xml->CreateTime;               //扫码关注时间
+
+
+            echo 'openid: '.$openid;echo '</br>';
+            echo '$sub_time: ' . $sub_time;
+
+            //获取用户信息
+            $user_info = $this->getUserInfo($openid);
+            echo '<pre>';print_r($user_info);echo '</pre>';
+
+            //保存用户信息
+            $u = WxModel::where(['openid'=>$openid])->first();
+            //var_dump($u);die;
+            if($u){       //用户不存在
+                echo '用户已存在';
+            }else{
+                $user_data = [
+                    'openid'            => $openid,
+                    'add_time'          => time(),
+                    'nickname'          => $user_info['nickname'],
+                    'sex'               => $user_info['sex'],
+                    'headimgurl'        => $user_info['headimgurl'],
+                    'subscribe_time'    => $sub_time,
+                ];
+
+                $id = WxModel::insertGetId($user_data);      //保存用户信息
+                var_dump($id);
+            }
+        }
+
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
-
-        $this->getUserInfo;
     }
 
 
@@ -95,32 +133,32 @@ class WeixinController extends Controller
         $data = json_decode(file_get_contents($url),true);
         echo '<pre>';print_r($data);echo '</pre>';
 
-        $where=[
-            'openid'=>$data['openid']
-        ];
-        $first=WxModel::where($where)->first();
-        if($first){
-            $info=[
-                'add_time'=>time(),
-                'nickname'=>$data['nickname'],
-                'sex'=>$data['sex'],
-                'headimgurl'=>$data['headimgurl'],
-                'subscribe_time'=>$data['subscribe_time']
-            ];
-            $res=WxModel::where($where)->update($info);
-            die('修改成功');
-        }else{
-            $info=[
-                'openid'=>$data['openid'],
-                'add_time'=>time(),
-                'nickname'=>$data['nickname'],
-                'sex'=>$data['sex'],
-                'headimgurl'=>$data['headimgurl'],
-                'subscribe_time'=>$data['subscribe_time']
-            ];
-            $res=WxModel::insert($info);
-        }
-        echo "关注成功";
+//        $where=[
+//            'openid'=>$data['openid']
+//        ];
+//        $first=WxModel::where($where)->first();
+//        if($first){
+//            $info=[
+//                'add_time'=>time(),
+//                'nickname'=>$data['nickname'],
+//                'sex'=>$data['sex'],
+//                'headimgurl'=>$data['headimgurl'],
+//                'subscribe_time'=>$data['subscribe_time']
+//            ];
+//            $res=WxModel::where($where)->update($info);
+//            die('修改成功');
+//        }else{
+//            $info=[
+//                'openid'=>$data['openid'],
+//                'add_time'=>time(),
+//                'nickname'=>$data['nickname'],
+//                'sex'=>$data['sex'],
+//                'headimgurl'=>$data['headimgurl'],
+//                'subscribe_time'=>$data['subscribe_time']
+//            ];
+//            $res=WxModel::insert($info);
+//        }
+//        echo "关注成功";
 
 
     }
