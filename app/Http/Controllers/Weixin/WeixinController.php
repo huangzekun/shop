@@ -93,15 +93,33 @@ class WeixinController extends Controller
         $data = json_decode(file_get_contents($url),true);
         echo '<pre>';print_r($data);echo '</pre>';
 
-        $info=[
-            'openid'=>$data['openid'],
-            'add_time'=>time(),
-            'nickname'=>$data['nickname'],
-            'sex'=>$data['sex'],
-            'headimgurl'=>$data['headimgurl'],
-            'subscribe_time'=>$data['subscribe_time']
+        $where=[
+            'openid'=>$data['openid']
         ];
-        $res=WxModel::insert($info);
+        $first=WxModel::where($where)->first()->toArray();
+        if($first){
+            $info=[
+                'add_time'=>time(),
+                'nickname'=>$data['nickname'],
+                'sex'=>$data['sex'],
+                'headimgurl'=>$data['headimgurl'],
+                'subscribe_time'=>$data['subscribe_time']
+            ];
+            $res=WxModel::where($where)->update($info);
+            die('修改成功');
+        }else{
+            $info=[
+                'openid'=>$data['openid'],
+                'add_time'=>time(),
+                'nickname'=>$data['nickname'],
+                'sex'=>$data['sex'],
+                'headimgurl'=>$data['headimgurl'],
+                'subscribe_time'=>$data['subscribe_time']
+            ];
+            $res=WxModel::insert($info);
+        }
+        echo "关注成功";
+
 
     }
 }
