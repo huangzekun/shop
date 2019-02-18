@@ -94,12 +94,12 @@ class WeixinController extends Controller
         echo '<pre>';print_r($data);echo '</pre>';
 
         $info=[
-            'openid'=>$data->openid,
+            'openid'=>$data['openid'],
             'add_time'=>time(),
-            'nickname'=>$data->nickname,
-            'sex'=>$data->sex,
-            'headimgurl'=>$data->headimgurl,
-            'subscribe_time'=>$data->subscribe_time
+            'nickname'=>$data['nickname'],
+            'sex'=>$data['sex'],
+            'headimgurl'=>$data['headimgurl'],
+            'subscribe_time'=>$data['subscribe_time']
         ];
         $res=WxModel::insert($info);
 
