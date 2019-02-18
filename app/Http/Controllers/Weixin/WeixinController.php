@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Weixin;
 
+use App\Model\WxModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -91,5 +92,16 @@ class WeixinController extends Controller
 
         $data = json_decode(file_get_contents($url),true);
         echo '<pre>';print_r($data);echo '</pre>';
+
+        $info=[
+            'openid'=>$data->openid,
+            'add_time'=>time(),
+            'nickname'=>$data->nickname,
+            'sex'=>$data->sex,
+            'headimgurl'=>$data->headimgurl,
+            'subscribe_time'=>$data->subscribe_time
+        ];
+        $res=WxModel::insert($info);
+
     }
 }
