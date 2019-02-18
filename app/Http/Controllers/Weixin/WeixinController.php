@@ -96,7 +96,7 @@ class WeixinController extends Controller
         $where=[
             'openid'=>$data['openid']
         ];
-        $first=WxModel::where($where)->first()->toArray();
+        $first=WxModel::where($where)->first();
         if($first){
             $info=[
                 'add_time'=>time(),
