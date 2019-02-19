@@ -66,7 +66,7 @@ class WeixinController extends Controller
                 var_dump($id);
             }
         }else if($event=='CLICK'){
-            if($xml['Eventkey']=='kefu01'){
+            if($xml->Eventkey=='kefu01'){
                 $this->kefu01($openid,$xml->ToUserName);
             }
         }
