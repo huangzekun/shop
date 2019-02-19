@@ -47,8 +47,7 @@ class WeixinController extends Controller
                 $media_id=$xml->MediaId;
                 $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$media_id;
                 $data = json_decode(file_get_contents($url), true);
-                echo '111';
-                return $data;
+                echo $data;
             }
         }
 
