@@ -42,6 +42,12 @@ class WeixinController extends Controller
                 $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
                 echo $xml_response;
                 exit();
+            }else if($xml->MsgType=="image"){
+                $access_token = $this->getWXAccessToken();
+                $media_id=$xml->MediaId;
+                $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$media_id;
+                $data = json_decode(file_get_contents($url), true);
+                return $data;
             }
         }
 
