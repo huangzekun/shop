@@ -52,7 +52,7 @@ class WeixinController extends Controller
                 }
             }else if($xml->MsgType=="voice"){
                 $this->dlVoice($xml->MediaId);
-                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '图片已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '语音已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                 echo $xml_response;
             }else if($xml->MsgType=='video'){
                 $this->dlVodeo($xml->MediaId);
