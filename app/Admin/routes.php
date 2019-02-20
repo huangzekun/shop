@@ -14,4 +14,5 @@ Route::group([
     $router->resource('/goods', GoodsController::class);
     $router->resource('/user', UserController::class);
     $router->resource('/wxuser', WeixinController::class);
+    $router->resource('/wxmodia', WeixinModiaController::class);
 });
