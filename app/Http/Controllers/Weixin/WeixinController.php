@@ -298,7 +298,7 @@ class WeixinController extends Controller
         $data=[
                 "touser"=> $ress,
                 "msgtype"=>"text",
-                "text"=>[ "content"=>"你是猪阿."]
+                "text"=>[ "content"=>"你是猪阿.".date('Y-m-d H:i:s')]
         ];
         //print_r($data);die;
         $client=new GuzzleHttp\Client(['base_uri'=>$url]);
