@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Weixin;
 
+use App\Model\WeixinMedia;
 use App\Model\WxModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -46,9 +47,19 @@ class WeixinController extends Controller
             }else if($xml->MsgType=="image"){
                 //视业务需求是否需要下载保存图片
                 if(1){  //下载图片素材
-                    $this->dlWxImg($xml->MediaId);
+                    $file_name=$this->dlWxImg($xml->MediaId);
                     $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '图片已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                     echo $xml_response;
+                    $data=[
+                        'openid'=>$openid,
+                        'add_time'=>time(),
+                        'msg_type'=>'images',
+                        'media_id'=>$xml->media_id,
+                        'format'=> $xml->Format,
+                        'msg_id'=> $xml->MsgId,
+                        'local_file_name'=> $file_name
+                    ];
+                    $id = WeixinMedia::insertGetId($data);      //保存用户信息
                 }
             }else if($xml->MsgType=="voice"){
                 $this->dlVoice($xml->MediaId);
@@ -126,6 +137,7 @@ class WeixinController extends Controller
         }else{      //保存失败
             echo '保存失败';
         }
+        return $file_name;
 
     }
 
@@ -149,11 +161,8 @@ class WeixinController extends Controller
         $wx_image_path = 'wx/voice/'.$file_name;
         //保存图片
         $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
-        if($r){     //保存成功
 
-        }else{      //保存失败
 
-        }
     }
 
     /**
@@ -173,7 +182,7 @@ class WeixinController extends Controller
         $file_name = substr(rtrim($file_info[0],'"'),-20);
 
         $wx_image_path = 'wx/vodeo/'.$file_name;
-        //视频图片
+        //视频
         $r = Storage::disk('local')->put($wx_image_path,$response->getBody());
         if($r){     //保存成功
 
