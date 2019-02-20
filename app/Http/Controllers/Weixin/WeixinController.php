@@ -52,6 +52,8 @@ class WeixinController extends Controller
                 }
             }else if($xml->MsgType=="voice"){
                 $this->dlVoice($xml->MediaId);
+                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. str_random(10) . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                echo $xml_response;
             }
         }
 
