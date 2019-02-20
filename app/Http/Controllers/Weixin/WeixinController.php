@@ -50,7 +50,7 @@ class WeixinController extends Controller
                     $file_name=$this->dlWxImg($xml->MediaId);
                     $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '图片已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                     echo $xml_response;
-                    $data=[
+                    $m_data=[
                         'openid'=>$openid,
                         'add_time'=>time(),
                         'msg_type'=>'image',
@@ -59,7 +59,7 @@ class WeixinController extends Controller
                         'msg_id'=> $xml->MsgId,
                         'local_file_name'=> $file_name
                     ];
-                    $m_id = WeixinMedia::insertGetId($data);      //保存用户信息
+                    $m_id = WeixinMedia::insertGetId($m_data);      //保存用户信息
                 }
             }else if($xml->MsgType=="voice"){
                 $this->dlVoice($xml->MediaId);
