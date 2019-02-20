@@ -54,8 +54,8 @@ class WeixinController extends Controller
                         'openid'=>$openid,
                         'add_time'=>time(),
                         'msg_type'=>'image',
-                        'media_id'=>$xml->Media_id,
-                        'format'=> $xml->Format,
+                        'media_id'=>$xml->MediaId,
+                       // 'format'=> $xml->Format,
                         'msg_id'=> $xml->MsgId,
                         'local_file_name'=> $file_name
                     ];
