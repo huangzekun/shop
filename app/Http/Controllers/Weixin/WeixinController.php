@@ -53,13 +53,13 @@ class WeixinController extends Controller
                     $data=[
                         'openid'=>$openid,
                         'add_time'=>time(),
-                        'msg_type'=>'images',
-                        'media_id'=>$xml->media_id,
+                        'msg_type'=>'image',
+                        'media_id'=>$xml->Media_id,
                         'format'=> $xml->Format,
                         'msg_id'=> $xml->MsgId,
                         'local_file_name'=> $file_name
                     ];
-                    $id = WeixinMedia::insertGetId($data);      //保存用户信息
+                    $m_id = WeixinMedia::insertGetId($data);      //保存用户信息
                 }
             }else if($xml->MsgType=="voice"){
                 $this->dlVoice($xml->MediaId);
