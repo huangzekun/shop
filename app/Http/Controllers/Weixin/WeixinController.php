@@ -58,42 +58,44 @@ class WeixinController extends Controller
                 $this->dlVodeo($xml->MediaId);
                 $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '视频已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
                 echo $xml_response;
+            }else if($xml->MsgType=="event"){
+                if($event=='subscribe'){
+                    $sub_time = $xml->CreateTime;               //扫码关注时间
+
+                    echo 'openid: '.$openid;echo '</br>';
+                    echo '$sub_time: ' . $sub_time;
+
+                    //获取用户信息
+                    $user_info = $this->getUserInfo($openid);
+                    echo '<pre>';print_r($user_info);echo '</pre>';
+
+                    //保存用户信息
+                    $u = WxModel::where(['openid'=>$openid])->first();
+                    //var_dump($u);die;
+                    if($u){       //用户不存在
+                        echo '用户已存在';
+                    }else{
+                        $user_data = [
+                            'openid'            => $openid,
+                            'add_time'          => time(),
+                            'nickname'          => $user_info['nickname'],
+                            'sex'               => $user_info['sex'],
+                            'headimgurl'        => $user_info['headimgurl'],
+                            'subscribe_time'    => $sub_time,
+                        ];
+
+                        $id = WxModel::insertGetId($user_data);      //保存用户信息
+                        var_dump($id);
+                    }
+                }else if($event=='CLICK'){
+                    if($xml->EventKey=='kefu01'){
+                        $this->kefu01($openid,$xml->ToUserName);
+                    }
+                }
             }
         }
 
-        if($event=='subscribe'){
-            $sub_time = $xml->CreateTime;               //扫码关注时间
 
-            echo 'openid: '.$openid;echo '</br>';
-            echo '$sub_time: ' . $sub_time;
-
-            //获取用户信息
-            $user_info = $this->getUserInfo($openid);
-            echo '<pre>';print_r($user_info);echo '</pre>';
-
-            //保存用户信息
-            $u = WxModel::where(['openid'=>$openid])->first();
-            //var_dump($u);die;
-            if($u){       //用户不存在
-                echo '用户已存在';
-            }else{
-                $user_data = [
-                    'openid'            => $openid,
-                    'add_time'          => time(),
-                    'nickname'          => $user_info['nickname'],
-                    'sex'               => $user_info['sex'],
-                    'headimgurl'        => $user_info['headimgurl'],
-                    'subscribe_time'    => $sub_time,
-                ];
-
-                $id = WxModel::insertGetId($user_data);      //保存用户信息
-                var_dump($id);
-            }
-        }else if($event=='CLICK'){
-            if($xml->EventKey=='kefu01'){
-                $this->kefu01($openid,$xml->ToUserName);
-            }
-        }
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
     }
@@ -236,34 +238,6 @@ class WeixinController extends Controller
 
         $data = json_decode(file_get_contents($url), true);
         return $data;
-
-//        $where=[
-//            'openid'=>$data['openid']
-//        ];
-//        $first=WxModel::where($where)->first();
-//        if($first){
-//            $info=[
-//                'add_time'=>time(),
-//                'nickname'=>$data['nickname'],
-//                'sex'=>$data['sex'],
-//                'headimgurl'=>$data['headimgurl'],
-//                'subscribe_time'=>$data['subscribe_time']
-//            ];
-//            $res=WxModel::where($where)->update($info);
-//            die('修改成功');
-//        }else{
-//            $info=[
-//                'openid'=>$data['openid'],
-//                'add_time'=>time(),
-//                'nickname'=>$data['nickname'],
-//                'sex'=>$data['sex'],
-//                'headimgurl'=>$data['headimgurl'],
-//                'subscribe_time'=>$data['subscribe_time']
-//            ];
-//            $res=WxModel::insert($info);
-//        }
-//        echo "关注成功";
-
     }
 
     /**
@@ -307,7 +281,32 @@ class WeixinController extends Controller
         }else{
             echo '菜单创建失败';
         }
-
     }
 
+    /*
+     * 群发消息
+     */
+    public function qunfa(){
+        $access_token = $this->getWXAccessToken();
+        $url="https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=".$access_token;
+        $client=new GuzzleHttp\Client(['base_uri'=>$url]);
+        $res=WxModel::get()->toArray();
+        foreach ($res as $k=>$v) {
+            $ress[]=$v['openid'];
+        }
+
+        $data=[
+                "touser"=> $ress,
+                "msgtype"=>"text",
+                "text"=>[ "content"=>"你是猪."]
+        ];
+        //print_r($data);die;
+        $client=new GuzzleHttp\Client(['base_uri'=>$url]);
+        $r = $client->request('POST', $url, [
+            'body' =>GuzzleHttp\json_encode($data,JSON_UNESCAPED_UNICODE)
+        ]);
+
+        $response_arr=json_decode($r->getBody(),true);
+        print_r($response_arr);
+    }
 }

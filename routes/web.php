@@ -121,3 +121,4 @@ Route::post('/weixin/valid1','Weixin\WeixinController@wxEvent');        //接收
 Route::post('/weixin/valid','Weixin\WeixinController@validToken');
 Route::get('/weixin/info/{openid}','Weixin\WeixinController@getUserInfo');
 Route::get('/weixin/menu','Weixin\WeixinController@menu');
+Route::get('/weixin/qunfa','Weixin\WeixinController@qunfa');
