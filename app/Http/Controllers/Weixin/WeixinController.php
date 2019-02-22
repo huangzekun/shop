@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Weixin;
 
 use App\Model\WeixinMedia;
+use App\Model\WxMaterial;
 use App\Model\WxModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -404,6 +405,15 @@ class WeixinController extends Controller
 
         //保存文件
         $save_file_path = $request->media->storeAs('form_test',$new_file_name);       //返回保存成功之后的文件路径
+
+        $user_data = [
+            'name'            =>  $new_file_name,
+            'url'            => $save_file_path,
+            'ctime'          => time()
+        ];
+
+        $id = WxMaterial::insertGetId($user_data);      //保存用户信息
+        var_dump($id);
 
         echo 'save_file_path: '.$save_file_path;echo '<hr>';
 
