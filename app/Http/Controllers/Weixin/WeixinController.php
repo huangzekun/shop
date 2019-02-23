@@ -463,4 +463,35 @@ class WeixinController extends Controller
         die( json_encode($response));
 
     }
+
+    public function chatmsg(Request $request){
+        $open_id = $request->input('openid');
+        $msg = $request->input('msg');
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='.$this->getWXAccessToken();
+        $data = [
+            'touser'       =>$open_id,
+            'msgtype'      =>'text',
+            'text'         =>[
+            'content'  =>$msg,
+            ]
+        ];
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('POST', $url, [
+            'body' => json_encode($data,JSON_UNESCAPED_UNICODE)
+        ]);
+        $body = $response->getBody();
+        $arr = json_decode($body,true);
+        //加入数据库
+        if($arr['errcode']==0){
+            $info = [
+                'type'      =>  2,
+                'message'   =>  $msg,
+                'msgid'     =>  0,
+                'add_time'  =>  time(),
+                'open_id'   =>  $open_id,
+            ];
+            WxChat::insertGetId($info);
+        }
+        return $arr;
+    }
 }

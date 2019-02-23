@@ -138,4 +138,5 @@ Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //�
 
 Route::get('/kefu/show/{id}','Weixin\WeixinController@kefu');     //客服测试
 Route::get('/kefu/chat','Weixin\WeixinController@chat');     //聊天测试
+Route::post('/chat/msg','Weixin\WeixinController@chatmsg');
 
