@@ -467,6 +467,7 @@ class WeixinController extends Controller
     public function chatmsg(Request $request){
         $open_id = $request->input('openid');
         $msg = $request->input('msg');
+        //echo $msg;
         $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='.$this->getWXAccessToken();
         $data = [
             'touser'       =>$open_id,
@@ -484,11 +485,11 @@ class WeixinController extends Controller
         //加入数据库
         if($arr['errcode']==0){
             $info = [
-                'type'      =>  2,
-                'message'   =>  $msg,
+                'msg_type'      =>  2,
+                'msg'   =>  $msg,
                 'msgid'     =>  0,
                 'add_time'  =>  time(),
-                'open_id'   =>  $open_id,
+                'openid'   =>  $open_id,
             ];
             WxChat::insertGetId($info);
         }

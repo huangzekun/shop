@@ -8,7 +8,7 @@
 
 @section('content')
     <h1>客服聊天:<i style="color:red">{{$res['nickname']}}</i></h1>
-    <div style="border:6px #00a7d0 solid; width: 600px; height: 500px;" id="chat_div"></div>
+    <div style="border:6px #00a7d0 solid; width: 600px;" id="chat_div"></div>
     <br>
     <form action="">
         <input type="hidden" value="{{$res['openid']}}" id="openid">
@@ -45,22 +45,16 @@
                     }
                 }
             })
-        },5000)
+        },2000)
 
         // 客服发送消息 begin
-        $("#send_msg_btn").click(function(e){
-            e.preventDefault();
-            var send_msg = $("#send_msg").val().trim();
-            var msg_str = '<p style="color: mediumorchid"> >>>>> '+send_msg+'</p>';
-            $("#chat_div").append(msg_str);
-            $("#send_msg").val("");
-        });
+
 
         //客服发送消息
         $('#send_msg_btn').click(function (e) {
             e.preventDefault();
             var send_msg = $('#send_msg').val().trim();
-            //console.log(send_msg);
+            console.log(send_msg);
             //console.log(message);
             //$("#chat_div").append(msg_str);
             $('#send_msg').val('');
@@ -68,17 +62,18 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url:     '/chat/msg',
-                type:    'post',
-                data:    {openid:openid,msg:send_msg},
+                url: '/chat/msg',
+                type: 'post',
+                data: {openid: openid, msg: send_msg},
                 dataType: 'json',
-                success:   function (a) {
-                    if(a.errcode == 0){
+                success: function (a) {
+                    if (a.errcode == 0) {
                         alert('发送成功');
-                    }else{
+                    } else {
                         alert('发送失败');
                     }
-            }
+                }
+            })
         })
     </script>
 @endsection
