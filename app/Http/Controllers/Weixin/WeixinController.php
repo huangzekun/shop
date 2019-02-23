@@ -430,9 +430,9 @@ class WeixinController extends Controller
 
     }
 
-    public function kefu(){
+    public function kefu($id){
         $where=[
-            'id'=>1
+            'id'=>$id
         ];
         $res=WxModel::where($where)->first()->toArray();
         $data=[

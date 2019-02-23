@@ -136,6 +136,6 @@ Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //�
 //Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //创建菜单
 
 
-Route::get('/kefu/show','Weixin\WeixinController@kefu');     //客服测试
+Route::get('/kefu/show/{id}','Weixin\WeixinController@kefu');     //客服测试
 Route::get('/kefu/chat','Weixin\WeixinController@chat');     //聊天测试
 
