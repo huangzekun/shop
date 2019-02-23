@@ -15,5 +15,6 @@ Route::group([
     $router->resource('/user', UserController::class);
     $router->resource('/wxuser', WeixinController::class);
     $router->resource('/wxmodia', WeixinModiaController::class);
-    $router->resource('/wxqunfa', WeixinQunfaController::class);
+    $router->resource('/wxmaterial',WxmaterialController::class);
+    $router->post('/wxmaterial',"\App\Http\Controllers\Weixin\WeixinController@formTest");
 });

@@ -134,3 +134,8 @@ Route::get('/weixin/material/list','Weixin\WeixinController@materialList');     
 Route::get('/weixin/material/upload','Weixin\WeixinController@upMaterial');     //上传永久素材
 Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //创建菜单
 //Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //创建菜单
+
+
+Route::get('/kefu/show','Weixin\WeixinController@kefu');     //客服测试
+Route::get('/kefu/chat','Weixin\WeixinController@chat');     //聊天测试
+

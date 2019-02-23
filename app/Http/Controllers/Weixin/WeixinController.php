@@ -30,7 +30,8 @@ class WeixinController extends Controller
     public function wxEvent()
     {
         $data = file_get_contents("php://input");
-
+        $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
+        file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
 
         //解析XML
         $xml = simplexml_load_string($data);        //将 xml字符串 转换成对象
@@ -42,9 +43,15 @@ class WeixinController extends Controller
         if(isset($xml->MsgType)){
             if($xml->MsgType=="text"){
                 $msg=$xml->Content;
-                $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. $msg. date('Y-m-d H:i:s') .']]></Content></xml>';
-                echo $xml_response;
-                exit();
+                $chat_data = [
+                    'msg'       => $xml->Content,
+                    'msgid'     => $xml->MsgId,
+                    'openid'    => $openid,
+                    'msg_type'  => 1        // 1用户发送消息 2客服发送消息
+                ];
+
+                $id = WeixinChatModel::insertGetId($chat_data);
+                var_dump($id);
             }else if($xml->MsgType=="image"){
                 //视业务需求是否需要下载保存图片
                 if(1){  //下载图片素材
@@ -108,8 +115,7 @@ class WeixinController extends Controller
         }
 
 
-        $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
-        file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
+
     }
 
     /**
@@ -420,6 +426,22 @@ class WeixinController extends Controller
         //上传至微信永久素材
         $this->upMaterialTest($save_file_path);
 
+
+    }
+
+    public function kefu(){
+        $where=[
+            'id'=>9
+        ];
+        $res=WxModel::where($where)->first()->toArray();
+        $data=[
+            'res'=>$res
+        ];
+        return view("test.kefu",$data);
+    }
+    public function chat(){
+        $openid=$_GET['openid'];
+        $pos=$_GET['pos'];
 
     }
 }
