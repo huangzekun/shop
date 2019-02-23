@@ -8,13 +8,13 @@
 
 @section('content')
     <h1>客服聊天:<i style="color:red">{{$res['nickname']}}</i></h1>
-    <div style="border:6px #00a7d0 solid; width: 600px; height: 500px;"></div>
+    <div style="border:6px #00a7d0 solid; width: 600px; height: 500px;" id="chat_div"></div>
     <br>
     <form action="">
         <input type="hidden" value="{{$res['openid']}}" id="openid">
         <input type="hidden" value="1" id="msg_pos">                <!--上次聊天位置-->
-        <input type="text">
-        <input type="submit" value="发送">
+        <input type="text" id="send_msg">
+        <input type="submit" value="发送" id="send_msg_btn">
     </form>
 @endsection
 
@@ -32,9 +32,28 @@
                 type:'get',
                 dataType:'json',
                 success:function(d){
+                    if(d.errno==0){     //服务器响应正常
+                        //数据填充
+                        var msg_str = '<blockquote>' + d.data.add_time +
+                                '<p>' + d.data.msg + '</p>' +
+                                '</blockquote>';
 
+                        $("#chat_div").append(msg_str);
+                        $("#msg_pos").val(d.data.id)
+                    }else{
+
+                    }
                 }
             })
         },5000)
+
+        // 客服发送消息 begin
+        $("#send_msg_btn").click(function(e){
+            e.preventDefault();
+            var send_msg = $("#send_msg").val().trim();
+            var msg_str = '<p style="color: mediumorchid"> >>>>> '+send_msg+'</p>';
+            $("#chat_div").append(msg_str);
+            $("#send_msg").val("");
+        });
     </script>
 @endsection

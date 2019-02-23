@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Weixin;
 
 use App\Model\WeixinMedia;
+use App\Model\WxChat;
 use App\Model\WxMaterial;
 use App\Model\WxModel;
 use Illuminate\Http\Request;
@@ -47,10 +48,11 @@ class WeixinController extends Controller
                     'msg'       => $xml->Content,
                     'msgid'     => $xml->MsgId,
                     'openid'    => $openid,
-                    'msg_type'  => 1        // 1用户发送消息 2客服发送消息
+                    'msg_type'  => 1,        // 1用户发送消息 2客服发送消息
+                    'add_time'  =>time()
                 ];
 
-                $id = WeixinChatModel::insertGetId($chat_data);
+                $id = WxChat::insertGetId($chat_data);
                 var_dump($id);
             }else if($xml->MsgType=="image"){
                 //视业务需求是否需要下载保存图片
@@ -431,7 +433,7 @@ class WeixinController extends Controller
 
     public function kefu(){
         $where=[
-            'id'=>9
+            'id'=>1
         ];
         $res=WxModel::where($where)->first()->toArray();
         $data=[
@@ -442,6 +444,24 @@ class WeixinController extends Controller
     public function chat(){
         $openid=$_GET['openid'];
         $pos=$_GET['pos'];
+        $msg = WxChat::where(['openid'=>$openid])->where('id','>',$pos)->first();
+        //$msg = WeixinChatModel::where(['openid'=>$openid])->where('id','>',$pos)->get();
+        if($msg){
+            $msg=$msg->toArray();
+            $msg['add_time']=date('Y-m-d H:i:s');
+            $response = [
+                'errno' => 0,
+                'data'  => $msg
+            ];
+
+        }else{
+            $response = [
+                'errno' => 50001,
+                'msg'   => '服务器异常，请联系管理员'
+            ];
+        }
+
+        die( json_encode($response));
 
     }
 }
