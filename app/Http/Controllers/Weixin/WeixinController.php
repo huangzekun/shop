@@ -53,13 +53,12 @@ class WeixinController extends Controller
                 ];
 
                 $id = WxChat::insertGetId($chat_data);
-                var_dump($id);
             }else if($xml->MsgType=="image"){
                 //视业务需求是否需要下载保存图片
                 if(1){  //下载图片素材
                     $file_name=$this->dlWxImg($xml->MediaId);
-                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '图片已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
-                    echo $xml_response;
+                    //$xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '图片已保存' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                    //echo $xml_response;
                     $m_data=[
                         'openid'=>$openid,
                         'add_time'=>time(),
