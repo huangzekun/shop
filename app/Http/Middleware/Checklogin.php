@@ -13,13 +13,5 @@ class Checklogin
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-        if(!$request->session()->get('u_token')){
-            header('refresh:2,login');
-            echo '请先登陆';
-            exit;
-        }
-        return $next($request);
-    }
+    
 }
