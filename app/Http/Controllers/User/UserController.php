@@ -115,9 +115,7 @@ class UserController extends Controller
 
 	//个人
 	public function center(){
-		if($_COOKIE['token'] != request()->session()->get("u_token")){
-			die('非法登陆');
-		}
+		
 		//echo 'u_token: '.request()->session()->get('u_token'); echo '</br>';
 		//echo '<pre>';print_r($request->session()->get('u_token'));echo '</pre>';
 

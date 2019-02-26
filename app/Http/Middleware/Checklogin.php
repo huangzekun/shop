@@ -13,5 +13,5 @@ class Checklogin
      * @param  \Closure  $next
      * @return mixed
      */
-    
+
 }
