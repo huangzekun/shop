@@ -15,13 +15,15 @@ class PayController extends Controller{
         $total_fee=1;   //支付总金额
         //$order_id=OrderModel::generateOrderSN();
         //print_r($order_id);
+
+        $orderInfo=OrderModel::where(['order_id'=>$order_id])->first();
         $order_info = [
             'appid'         =>  env('WEIXIN_APPID_0'),      //微信支付绑定的服务号的APPID
             'mch_id'        =>  env('WEIXIN_MCH_ID'),       // 商户ID
             'nonce_str'     => str_random(16),             // 随机字符串
             'sign_type'     => 'MD5',
             'body'          => '测试订单-'.mt_rand(1111,9999) . str_random(6),
-            'out_trade_no'  => $order_id,                       //本地订单号
+            'out_trade_no'  => $orderInfo->order_sn,                       //本地订单号
             'total_fee'     => $total_fee,
             'spbill_create_ip'  => $_SERVER['REMOTE_ADDR'],     //客户端IP
             'notify_url'    => $this->weixin_notify_url,        //通知回调地址
@@ -152,7 +154,7 @@ class PayController extends Controller{
 
             if($sign){       //签名验证成功
                 //TODO 逻辑处理  订单状态更新
-                OrderModel::where(['order_id'=>$xml->out_trade_no])->update(['pay_time'=>time(),'is_pay'=>1,'plat'=>2]);
+                OrderModel::where(['order_sn'=>$xml->out_trade_no])->update(['pay_time'=>time(),'is_pay'=>1,'plat'=>2]);
             }else{
                 //TODO 验签失败
                 echo '验签失败，IP: '.$_SERVER['REMOTE_ADDR'];
@@ -164,6 +166,23 @@ class PayController extends Controller{
         $response = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
         echo $response;
 
+    }
+
+    public function success(Request $resquest){
+        $order_id=$resquest->input('order_id');
+        $res=OrderModel::where(['order_id'=>$order_id])->first();
+        if($res->is_pay== 1){
+            $data=[
+                'error'=>0,
+                'msg'=>"支付成功"
+            ];
+        }else{
+            $data=[
+                'error'=>4001,
+                'msg'=>"支付失败"
+            ];
+        }
+        return $data;
     }
 
 }

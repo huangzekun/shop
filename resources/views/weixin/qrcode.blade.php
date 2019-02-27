@@ -21,5 +21,24 @@
                     );
                 }
         )()
+
+
+        setInterval(function(){
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/weixin/pay/success?order_id=' + "{{$order_id}}",
+                type: 'get',
+                dataType: 'json',
+                success: function (a) {
+                    //console.log(a.error)
+                    if(a.error==0){
+                        alert(a.msg);
+                        location.href="/order/myorder";
+                    }
+                }
+            })
+        },2000)
     </script>
 @endsection
