@@ -142,7 +142,7 @@ Route::post('/chat/msg','Weixin\WeixinController@chatmsg');  //客服发送消�
 
 
 //微信支付
-Route::get('/weixin/pay/test','Weixin\PayController@test');     //微信支付测试
+Route::get('/weixin/pay/test/{order_id}','Weixin\PayController@test');     //微信支付测试
 Route::post('/weixin/pay/notice','Weixin\PayController@notice');     //微信支付通知回调
 
 

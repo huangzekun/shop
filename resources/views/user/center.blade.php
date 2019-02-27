@@ -1,5 +1,5 @@
 
-<p>@extends('layouts.bst')
+@extends('layouts.bst')
 
 @section('title')  @endsection
 

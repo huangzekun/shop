@@ -115,7 +115,7 @@ class UserController extends Controller
 
 	//个人
 	public function center(){
-		
+
 		//echo 'u_token: '.request()->session()->get('u_token'); echo '</br>';
 		//echo '<pre>';print_r($request->session()->get('u_token'));echo '</pre>';
 

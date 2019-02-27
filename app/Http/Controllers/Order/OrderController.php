@@ -64,7 +64,7 @@ class OrderController extends Controller{
             exit;
         }
         //支付成功修改时间
-        OrderModel::where(['order_id'=>$order_id])->update(['pay_time'=>time(),'pay_amout'=>rand(1111,9999),'is_pay'=>1]);
+        OrderModel::where(['order_id'=>$order_id])->update(['pay_time'=>time(),'pay_amout'=>rand(1111,9999),'is_pay'=>1,'plat'=>2]);
 
         //增加积分
         UserModel::where(['user_id'=>Auth::id()])->increment('user_optins',$info['order_amout']);
@@ -90,4 +90,7 @@ class OrderController extends Controller{
         ];
         return view('order/myorder',$data);
     }
+
+
+
 }

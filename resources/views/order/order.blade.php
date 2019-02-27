@@ -1,10 +1,6 @@
-<p>@extends('layouts.bst')
+@extends('layouts.bst')
 
 @section('title') {{$title}}    @endsection
-
-@section('header')
-    @parent
-@endsection
 
 @section('content')
     <form method="post" action="/loginadd">
@@ -22,11 +18,7 @@
                     <td class="success">{{$list['add_time']}}</td>
                 </tr>
         </table>
-        <a href="/pay/alipay/pay/{{$list['order_id']}}" class="btn btn-danger btn-block">付款 </a>
-
+        <a href="/pay/alipay/pay/{{$list['order_id']}}" class="btn btn-danger">支付宝付款 </a>
+        <a href="/weixin/pay/test/{{$list['order_id']}}" class="btn btn-success">微信付款 </a>
     </form>
-@endsection
-
-@section('footer')
-    @parent
 @endsection
