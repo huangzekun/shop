@@ -23,7 +23,8 @@
                 <td class="success">{{$v['order_amout']}}</td>
                 <td class="success">
                     @if($v['is_pay']==0)
-                        <a href="/pay/alipay/pay/{{$v['order_id']}}" class="btn btn-danger ">去付款 </a>
+                        <a href="/pay/alipay/pay/{{$v['order_id']}}" class="btn btn-danger">支付宝付款 </a>
+                        <a href="/weixin/pay/test/{{$v['order_id']}}" class="btn btn-success">微信付款 </a>
                     @else
                         已付款
                     @endif
