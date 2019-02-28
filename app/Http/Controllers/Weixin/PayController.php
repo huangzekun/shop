@@ -144,15 +144,15 @@ class PayController extends Controller{
 
         //记录日志
         $log_str = date('Y-m-d H:i:s') . "\n" . $data . "\n<<<<<<<";
-        file_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
+        //file_put_contents('logs/wx_pay_notice.log',$log_str,FILE_APPEND);
 
         $xml = simplexml_load_string($data);
 
         if($xml->result_code=='SUCCESS' && $xml->return_code=='SUCCESS'){      //微信支付成功回调
             //验证签名
-            $sign = true;
+            $sign=$this->Sign($data);
 
-            if($sign){       //签名验证成功
+            if($sign==$xml->sign){       //签名验证成功
                 //TODO 逻辑处理  订单状态更新
 
                 OrderModel::where(['order_sn'=>$xml->out_trade_no])->update(['pay_time'=>time(),'is_pay'=>1,'plat'=>2]);
@@ -166,6 +166,15 @@ class PayController extends Controller{
 
         $response = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
         echo $response;
+
+    }
+
+    public function Sign($data){
+        $data = json_decode(json_encode(simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        $this->values = [];
+        $this->values = $data;
+        $sign=$this->SetSign();
+        return $sign;
 
     }
 
@@ -184,6 +193,11 @@ class PayController extends Controller{
             ];
         }
         return $data;
+    }
+
+    public function weixinlogn(){
+        $data = 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe24f70961302b5a5&redirect_uri=http%3A%2F%2Fmall.77sc.com.cn%2Fweixin.php&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect';
+        return view("weixin.wxlogin",$data);
     }
 
 }
