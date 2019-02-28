@@ -1,7 +1,7 @@
 @extends('layouts.bst')
 
 @section('content')
-    <a href="">Login</a>
+    <a href="{{$url}}">Login</a>
 
 @endsection
 @section('footer')
