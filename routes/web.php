@@ -146,5 +146,5 @@ Route::get('/weixin/pay/test/{order_id}','Weixin\PayController@test');     //微
 Route::post('/weixin/pay/notice','Weixin\PayController@notice');     //微信支付通知回调
 Route::get('/weixin/pay/success','Weixin\PayController@success');
 
-Route::get('/weixin/wxlogin','Weixin\PayController@wxlogin');
-
+Route::get('/weixin/wxlogin','Weixin\PayController@wxlogin');//微信登陆
+Route::get('/weixin/wxlogin2','Weixin\PayController@wxlogin2');
