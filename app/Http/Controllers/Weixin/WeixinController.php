@@ -521,7 +521,7 @@ class WeixinController extends Controller
             Redis::setTimeout($this->redis_weixin_jsapi_ticket,3600);
         }
         $noncestr=str_random(16);
-        $jsapi_ticket=$token['ticket'];
+        $jsapi_ticket=$token;
         $timestamp=time();
         $url='https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $str='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$noncestr.'&timestamp='.$timestamp.'&url='.$url;
