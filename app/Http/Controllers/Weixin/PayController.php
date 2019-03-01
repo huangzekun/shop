@@ -138,8 +138,7 @@ class PayController extends Controller{
     /**
      * 微信支付回调
      */
-    public function notice()
-    {
+    public function notice(){
         $data = file_get_contents("php://input");
 
         //记录日志
