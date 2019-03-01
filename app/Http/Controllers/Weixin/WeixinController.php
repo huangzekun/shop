@@ -527,7 +527,7 @@ class WeixinController extends Controller
         $str='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$noncestr.'&timestamp='.$timestamp.'&url='.$url;
         $sign=[
             'appid'=>env("WEIXIN_APPID"),
-            'sign'=>ssh1($str),
+            'sign'=>sha1($str),
             'noncestr'=>$noncestr,
             'timestamp'=>$timestamp
         ];
