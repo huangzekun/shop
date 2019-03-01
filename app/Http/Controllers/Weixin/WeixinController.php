@@ -17,6 +17,7 @@ class WeixinController extends Controller
     //
 
     protected $redis_weixin_access_token = 'str:weixin_access_token';     //微信 access_token
+    protected $redis_weixin_jsapi_ticket = 'str:weixin_jsapi_ticket';     //微信 access_token
     /**
      * 首次接入
      */
@@ -501,26 +502,37 @@ class WeixinController extends Controller
     public function jssdk(){
         //计算签名
 
-        $jsconfig = [
-            'appid' => env('WEIXIN_APPID_0'),        //APPID
-            'timestamp' => time(),
-            'noncestr'    => str_random(10),
-            'sign'      => $this->wxJsConfigSign()
-        ];
-
         $data = [
-            'jsconfig'  => $jsconfig
+            'jsconfig'  => $this->wxJsConfigSign()
         ];
         return view('weixin.jssdk',$data);
     }
 
     public function wxJsConfigSign(){
-
-        $sign = str_random(15);
+        $res=$this->getWXAccessToken();
+        $url="https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=".$res."&type=jsapi";
+        $token=Redis::get($this->redis_weixin_jsapi_ticket);
+        //获取缓存
+        if(!$token){        // 无缓存 请求微信接口
+            $data = json_decode(file_get_contents($url),true);
+            //记录缓存
+            $token = $data['ticket'];
+            Redis::set($this->redis_weixin_jsapi_ticket,$token);
+            Redis::setTimeout($this->redis_weixin_jsapi_ticket,3600);
+        }
+        $noncestr=str_random(16);
+        $jsapi_ticket=$token['ticket'];
+        $timestamp=time();
+        $url='https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $str='jsapi_ticket='.$jsapi_ticket.'&noncestr='.$noncestr.'&timestamp='.$timestamp.'&url='.$url;
+        $sign=[
+            'appid'=>env("WEIXIN_APPID"),
+            'sign'=>ssh1($str),
+            'noncestr'=>$noncestr,
+            'timestamp'=>$timestamp
+        ];
         return $sign;
+
     }
-
-
-
 
 }
