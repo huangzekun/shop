@@ -114,39 +114,45 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 //微信
-Route::get('/weixin/test','Weixin\WeixinController@test');
-Route::get('/weixin/valid','Weixin\WeixinController@validToken');
-Route::get('/weixin/valid1','Weixin\WeixinController@validToken1');
-Route::post('/weixin/valid1','Weixin\WeixinController@wxEvent');        //接收微信服务器事件推送
-Route::post('/weixin/valid','Weixin\WeixinController@validToken');
-Route::get('/weixin/info/{openid}','Weixin\WeixinController@getUserInfo');
-Route::get('/weixin/menu','Weixin\WeixinController@menu');
-Route::get('/weixin/qunfa','Weixin\WeixinController@qunfa');
+Route::get('/weixin/test','weixin\WeixinController@test');
+Route::get('/weixin/valid','weixin\WeixinController@validToken');
+Route::get('/weixin/valid1','weixin\WeixinController@validToken1');
+Route::post('/weixin/valid1','weixin\WeixinController@wxEvent');        //接收微信服务器事件推送
+Route::post('/weixin/valid','weixin\WeixinController@validToken');
+Route::get('/weixin/info/{openid}','weixin\WeixinController@getUserInfo');
+Route::get('/weixin/menu','weixin\WeixinController@menu');
+Route::get('/weixin/qunfa','weixin\WeixinController@qunfa');
 
 
-Route::get('/form/show','Weixin\WeixinController@formShow');     //表单测试
-Route::post('/form/test','Weixin\WeixinController@formTest');     //表单测试
+Route::get('/form/show','weixin\WeixinController@formShow');     //表单测试
+Route::post('/form/test','weixin\WeixinController@formTest');     //表单测试
 
 
 
 
-Route::get('/weixin/material/list','Weixin\WeixinController@materialList');     //获取永久素材列表
-Route::get('/weixin/material/upload','Weixin\WeixinController@upMaterial');     //上传永久素材
-Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //创建菜单
-//Route::post('/weixin/material','Weixin\WeixinController@materialTest');     //创建菜单
+Route::get('/weixin/material/list','weixin\WeixinController@materialList');     //获取永久素材列表
+Route::get('/weixin/material/upload','weixin\WeixinController@upMaterial');     //上传永久素材
+Route::post('/weixin/material','weixin\WeixinController@materialTest');     //创建菜单
+//Route::post('/weixin/material','weixin\WeixinController@materialTest');     //创建菜单
 
 
-Route::get('/kefu/show/{id}','Weixin\WeixinController@kefu');     //客服测试
-Route::get('/kefu/chat','Weixin\WeixinController@chat');     //聊天测试
-Route::post('/chat/msg','Weixin\WeixinController@chatmsg');  //客服发送消息
+Route::get('/kefu/show/{id}','weixin\WeixinController@kefu');     //客服测试
+Route::get('/kefu/chat','weixin\WeixinController@chat');     //聊天测试
+Route::post('/chat/msg','weixin\WeixinController@chatmsg');  //客服发送消息
 
 
 //微信支付
-Route::get('/weixin/pay/test/{order_id}','Weixin\PayController@test');     //微信支付测试
-Route::post('/weixin/pay/notice','Weixin\PayController@notice');     //微信支付通知回调
-Route::get('/weixin/pay/success','Weixin\PayController@success');
+Route::get('/weixin/pay/test/{order_id}','weixin\PayController@test');     //微信支付测试
+Route::post('/weixin/pay/notice','weixin\PayController@notice');     //微信支付通知回调
+Route::get('/weixin/pay/success','weixin\PayController@success');
 
-Route::get('/weixin/wxlogin','Weixin\PayController@wxlogin');//微信登陆
-Route::get('/weixin/wxlogin2','Weixin\PayController@wxlogin2');
+Route::get('/weixin/wxlogin','weixin\PayController@wxlogin');//微信登陆
+Route::get('/weixin/wxlogin2','weixin\PayController@wxlogin2');
 
-Route::get('/weixin/jssdk','Weixin\WeixinController@jssdk');
+Route::get('/weixin/jssdk','weixin\WeixinController@jssdk');
+
+
+//用户列表展示
+Route::get('/zhanshi','Weixin\WeixinController@zhanshi');
+Route::get('/token','Weixin\WeixinController@getWXAccessToken');
+Route::post('/dabiaoqian','Weixin\WeixinController@dabiaoqian');

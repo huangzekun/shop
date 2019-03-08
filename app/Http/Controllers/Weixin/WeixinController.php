@@ -9,6 +9,7 @@ use App\Model\WxModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,6 +55,7 @@ class WeixinController extends Controller
                 ];
 
                 $id = WxChat::insertGetId($chat_data);
+
             }else if($xml->MsgType=="image"){
                 //视业务需求是否需要下载保存图片
                 if(1){  //下载图片素材
@@ -82,13 +84,13 @@ class WeixinController extends Controller
             }else if($xml->MsgType=="event"){
                 if($event=='subscribe'){
                     $sub_time = $xml->CreateTime;               //扫码关注时间
-
-                    echo 'openid: '.$openid;echo '</br>';
-                    echo '$sub_time: ' . $sub_time;
-
+                    //echo 'openid: '.$openid;echo '</br>';
+                    //echo '$sub_time: ' . $sub_time;
+                    $xml_response = '<xml><ToUserName><![CDATA['.$openid.']]></ToUserName><FromUserName><![CDATA['.$xml->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['. '关注成功' . ' >>> ' . date('Y-m-d H:i:s') .']]></Content></xml>';
+                    echo $xml_response;
                     //获取用户信息
                     $user_info = $this->getUserInfo($openid);
-                    echo '<pre>';print_r($user_info);echo '</pre>';
+                    //echo '<pre>';print_r($user_info);echo '</pre>';
 
                     //保存用户信息
                     $u = WxModel::where(['openid'=>$openid])->first();
@@ -106,7 +108,7 @@ class WeixinController extends Controller
                         ];
 
                         $id = WxModel::insertGetId($user_data);      //保存用户信息
-                        var_dump($id);
+                        //var_dump($id);
                     }
                 }else if($event=='CLICK'){
                     if($xml->EventKey=='kefu01'){
@@ -223,25 +225,7 @@ class WeixinController extends Controller
         file_put_contents('logs/wx_event.log',$log_str,FILE_APPEND);
     }
 
-    /**
-     * 获取微信AccessToken
-     */
-    public function getWXAccessToken()
-    {
-        $token=Redis::get($this->redis_weixin_access_token);
-        //获取缓存
-         if(!$token){        // 无缓存 请求微信接口
-            $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WEIXIN_APPID').'&secret='.env('WEIXIN_APPSECRET');
-            $data = json_decode(file_get_contents($url),true);
 
-            //记录缓存
-            $token = $data['access_token'];
-            Redis::set($this->redis_weixin_access_token,$token);
-            Redis::setTimeout($this->redis_weixin_access_token,3600);
-        }
-        return $token;
-
-    }
 
     /**
      * 获取用户信息
@@ -533,6 +517,52 @@ class WeixinController extends Controller
         ];
         return $sign;
 
+    }
+
+
+
+    //用户列表展示
+    public function zhanshi(){
+        $links=WxModel::paginate(2);
+        $data=[
+            'list'=>$links
+        ];
+        $aaa = json_encode($data['list']);
+        Redis::set('shuju',$aaa);
+        Redis::setTimeout('shujusss',3600);
+        return view('weixin.zhanshi',$data);
+    }
+
+    //获取微信AccessToken
+    public function getWXAccessToken()
+    {
+        $token=Redis::get($this->redis_weixin_access_token);
+        //获取缓存
+        if(!$token){        // 无缓存 请求微信接口
+            $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WEIXIN_APPID').'&secret='.env('WEIXIN_APPSECRET');
+            $data = json_decode(file_get_contents($url),true);
+
+            //记录缓存
+            $token = $data['access_token'];
+            Redis::set($this->redis_weixin_access_token,$token);
+            Redis::setTimeout($this->redis_weixin_access_token,7600);
+        }
+        return $token;
+
+    }
+    //打标签
+    public function dabiaoqian(){
+        $openid=$_POST['openid'];
+        $url="https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token=".$this->getWXAccessToken();
+        $data=[
+            "openid_list"=>[$openid],
+            "tagid"=>100
+        ];
+        $client=new GuzzleHttp\Client();
+        $r = $client->request('POST', $url, [
+            'body' => json_encode($data)
+        ]);
+        echo '<pre>';print_r(json_decode($r->getBody(),true));;echo '<pre>';
     }
 
 }
